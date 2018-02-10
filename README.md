@@ -42,45 +42,6 @@ extendSequelize(db, {
 });
 ```
 
-### CreatedBy
-
-If a model has a `createdBy` field, this extension will automatically add `options.user.id` to `createdBy` upon an instance is creation.
-```
-const task1 = await db.task.create({...}, { user: { id: 2 } });
-console.log(task1.createdBy);
-// 2
-
-const task2 = await db.task.create({...});
-console.log(task2.createdBy);
-// 1 <- default userId
-```
-
-### UpdatedBy
-
-If a model has a `updatedBy` field, this extension will automatically add `options.user.id` to `updatedBy`.
-```
-await task.save({ user: { id: 2 } });
-console.log(task1.updatedBy);
-// 2
-
-await task.save();
-console.log(task1.updatedBy);
-// 1 <- default userId
-```
-
-### DeletedBy
-
-If a model has a `deletedBy` field, this extension will automatically add `options.user.id` to `deletedBy`.
-```
-await task.destroy({ user: { id: 2 } });
-console.log(task1.deletedBy);
-// 2
-
-await task.destroy();
-console.log(task1.deletedBy);
-// 1 <- default userId
-```
-
 ### Tracking
 
 This extension enables to track changes instance changes. You can define what models will be tracked using the option `history` and you can define what associated fields will be tracked using `extendHistory` option when creating the association.
@@ -138,4 +99,45 @@ const task = await Task.create({ name: 'Test', projectId: 1 });
 //     after: { tasks: [{ id: 1, name: 'Test'}] }
 //   ...
 // ]
+```
+
+### GraphQL
+
+### CreatedBy
+
+If a model has a `createdBy` field, this extension will automatically add `options.user.id` to `createdBy` upon an instance is creation.
+```
+const task1 = await db.task.create({...}, { user: { id: 2 } });
+console.log(task1.createdBy);
+// 2
+
+const task2 = await db.task.create({...});
+console.log(task2.createdBy);
+// 1 <- default userId
+```
+
+### UpdatedBy
+
+If a model has a `updatedBy` field, this extension will automatically add `options.user.id` to `updatedBy`.
+```
+await task.save({ user: { id: 2 } });
+console.log(task1.updatedBy);
+// 2
+
+await task.save();
+console.log(task1.updatedBy);
+// 1 <- default userId
+```
+
+### DeletedBy
+
+If a model has a `deletedBy` field, this extension will automatically add `options.user.id` to `deletedBy`.
+```
+await task.destroy({ user: { id: 2 } });
+console.log(task1.deletedBy);
+// 2
+
+await task.destroy();
+console.log(task1.deletedBy);
+// 1 <- default userId
 ```
