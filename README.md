@@ -2,7 +2,7 @@
 
 This module provides pre-built extensions and an interface to extend sequelize models.
 
-# Usage
+### Usage
 
 ```
 const Sequelize = require('sequelize');
@@ -32,7 +32,7 @@ extendSequelize(db, {
 });
 ```
 
-# Built-in Extensions
+### Built-in Extensions
 
 The built-in extensions are enabled by default. In order to disable, you can call like below:
 
@@ -42,7 +42,7 @@ extendSequelize(db, {
 });
 ```
 
-# CreatedBy
+### CreatedBy
 
 If a model has a `createdBy` field, this extension will automatically add `options.user.id` to `createdBy` upon an instance is creation.
 ```
@@ -55,7 +55,7 @@ console.log(task2.createdBy);
 // 1 <- default userId
 ```
 
-# UpdatedBy
+### UpdatedBy
 
 If a model has a `updatedBy` field, this extension will automatically add `options.user.id` to `updatedBy`.
 ```
@@ -68,7 +68,7 @@ console.log(task1.updatedBy);
 // 1 <- default userId
 ```
 
-# DeletedBy
+### DeletedBy
 
 If a model has a `deletedBy` field, this extension will automatically add `options.user.id` to `deletedBy`.
 ```
@@ -81,6 +81,6 @@ console.log(task1.deletedBy);
 // 1 <- default userId
 ```
 
-# Tracking
+### Tracking
 
 This extension enables to track changes instance changes.
