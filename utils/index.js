@@ -70,6 +70,8 @@ utils.hasThroughAssociation = association => !!association.through;
 
 utils.getAssociationTarget = association => association.target;
 
+utils.getAssociationSource = association => association.source;
+
 utils.getAssociationForeignKey = association => association.foreignKey;
 
 utils.getAssociationAs = association => association.as;

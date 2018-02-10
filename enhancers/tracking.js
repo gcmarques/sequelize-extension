@@ -6,7 +6,15 @@ const utils = require('../utils');
 const TEMP = 'TEMP';
 
 function getTrackingKey(model) {
-  return `${model.name}-${Math.random()}-${Date.now()}`;
+  return `${utils.getName(model)}-${Math.random()}-${Date.now()}`;
+}
+
+function getVisibleAttributes(model) {
+  return ['id'].concat(_.without(
+    _.keys(utils.getRawAttributes(model)),
+    'updatedAt', 'updatedBy', 'createdAt',
+    'createdBy', 'deletedAt', 'deletedBy',
+  ));
 }
 
 function safe(value, model) {
@@ -41,11 +49,7 @@ function getScope(model, association) {
   const target = utils.getAssociationTarget(association);
   const list = utils.isListAssociation(association);
   const as = utils.getAssociationAs(association);
-  const attributes = _.without(
-    _.keys(utils.getRawAttributes(target)),
-    'updatedAt', 'updatedBy', 'createdAt',
-    'createdBy', 'deletedAt', 'deletedBy',
-  );
+  const attributes = getVisibleAttributes(target);
   const get = async (id) => {
     const params = {
       attributes: ['id'],
@@ -91,7 +95,7 @@ function afterSetter(log) {
     const { before, trackingKey, scope } = utils.getTriggerParams(options, 'tracking');
     const after = {};
     after[scope.as] = await scope.get(self.id);
-    await log({
+    await log([{
       type: 'UPDATE',
       reference: `${scope.name}-${self.id}`,
       data: {
@@ -102,11 +106,56 @@ function afterSetter(log) {
       },
       executionTime: perfy.end(trackingKey).nanoseconds,
       userId: options.user.id,
-    });
+    }]);
   };
 }
 
-function beforeUpdate(model, association, key) {
+function beforeUpdate(model) {
+  return async function wrappedBeforeUpdate(self, options) {
+    const created = !self.id;
+    const changes = self.changed();
+    if (changes.length || created) {
+      const trackingKey = getTrackingKey(model);
+      perfy.start(trackingKey);
+
+      const after = {};
+      const before = {};
+      _.each(changes, (key) => {
+        after[key] = self[key];
+        before[key] = self.previous(key);
+      });
+      utils.setTriggerParams(options, 'tracking', {
+        before, after, trackingKey,
+      });
+    } else {
+      utils.setTriggerParams(options, 'tracking', {});
+    }
+  };
+}
+
+function afterUpdate(model, log) {
+  const name = utils.getName(model);
+  const attributes = getVisibleAttributes(model);
+  return async function wrappedAfterUpdate(self, options) {
+    const { before, after, trackingKey } = utils.getTriggerParams(options, 'tracking');
+    if (trackingKey) {
+      await log([{
+        type: 'UPDATE',
+        reference: `${name}-${self.id}`,
+        data: {
+          type: name,
+          id: self.id,
+          before: safe(_.pick(before, attributes), model),
+          after: safe(_.pick(after, attributes), model),
+        },
+        executionTime: perfy.end(trackingKey).nanoseconds,
+        userId: options.user.id,
+      }]);
+    }
+  };
+}
+
+function beforeUpdateAssociation(model, association, key) {
   const scope = getScope(model, association);
   const track = async (id, _instance, changes, state) => {
     const instance = _instance.toJSON();
@@ -149,7 +198,7 @@ function beforeUpdate(model, association, key) {
     };
   };
 
-  return async function wrappedBeforeUpdate(self, options) {
+  return async function wrappedBeforeUpdateAssociation(self, options) {
     const created = !self.id;
     const changes = self.changed();
 
@@ -157,28 +206,30 @@ function beforeUpdate(model, association, key) {
       return;
     }
     const trackingKey = getTrackingKey(model);
-    const updates = [];
+    let updates = [];
     if (self[key] !== self.previous(key)) {
       if (self.previous(key)) {
         updates.push(track(self.previous(key), self, changes, 'removed'));
       }
       if (self[key]) {
-        updates.push(track(self.previous(key), self, changes, 'added'));
+        updates.push(track(self[key], self, changes, 'added'));
       }
     } else {
       updates.push(track(self[key], self, changes, 'updated'));
     }
-    await Promise.all(updates);
-    utils.setTriggerParams(options, `tracking-${scope.as}`, { updates, trackingKey });
+    if (updates.length) {
+      perfy.start(trackingKey);
+      updates = await Promise.all(updates);
+    }
+    utils.setTriggerParams(options, `tracking-${scope.as}`, { updates, trackingKey, created });
   };
 }
 
-function afterUpdate(as, log) {
-  return async function wrappedAfterUpdate(self, options) {
-    const { updates, trackingKey } = utils.getTriggerParams(options, `tracking-${as}`);
+function afterUpdateAssociation(as, log) {
+  return async function wrappedAfterUpdateAssociation(self, options) {
+    const { updates, trackingKey, created } = utils.getTriggerParams(options, `tracking-${as}`);
     if (updates.length) {
       const logs = [];
-      const created = !self.id;
       const executionTime = perfy.end(trackingKey).nanoseconds;
       _.each(updates, (update) => {
         if (created) {
@@ -219,7 +270,7 @@ function enhance(model, hooks, settings) {
 
   let { log } = settings;
   if (!_.isFunction(log)) {
-    log = logs => _.each(logs, log => GLOBAL.console.log(log));
+    log = async logs => _.each(logs, log => global.console.log(log));
   }
 
   _.each(associations, (association) => {
@@ -261,14 +312,18 @@ function enhance(model, hooks, settings) {
         }
       });
       if (pairedAssociation && utils.getAssociationOptions(pairedAssociation).extendHistory) {
-        const target = utils.getAssociationTarget(pairedAssociation);
-        hooks[name].beforeUpdate.push(beforeUpdate(target, pairedAssociation, foreignKey));
-        hooks[name].afterUpdate.push(afterUpdate(utils.getAssociationAs(pairedAssociation), log));
+        const target = utils.getAssociationTarget(association);
+        hooks[name].beforeUpdate
+          .push(beforeUpdateAssociation(target, pairedAssociation, foreignKey));
+        hooks[name].afterUpdate
+          .push(afterUpdateAssociation(utils.getAssociationAs(pairedAssociation), log));
       }
     }
   });
 
   if (modelOptions.history) {
+    hooks[name].beforeUpdate.push(beforeUpdate(model));
+    hooks[name].afterUpdate.push(afterUpdate(model, log));
     model.update = async function notPermittedUpdate() {
       throw new Error('Batch updates are not allowed');
     };

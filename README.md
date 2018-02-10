@@ -1,1 +1,1 @@
-# graphql-sequelize-model
+# sequelize-extension

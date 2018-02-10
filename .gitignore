@@ -16,11 +16,5 @@ jspm_packages
 .npm-debug.log
 .yarn-error.log
 
-# naught
-naught.pid
-naught.ipc
-stderr.log
-stdout.log
-
 # Environment
 .env

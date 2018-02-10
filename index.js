@@ -4,13 +4,14 @@ const utils = require('./utils');
 const enhancers = require('./enhancers');
 
 const defaults = {};
-_.each(enhancers, (key) => {
+_.each(enhancers, (enhancer, key) => {
   defaults[key] = {};
 });
 
 function wrappedOptions(options) {
   options = options || {};
   options.__gsm = {};
+  options.user = utils.getUser(options);
   return options;
 }
 
@@ -27,7 +28,7 @@ function wrapSetter(model, functionName, hooks) {
   model.prototype[functionName] = async function wrappedSet(value, options) {
     options = wrappedOptions(options);
     await callTriggers(hooks[`before${triggerName}`], this, value, options);
-    const result = set.call(this, value, options);
+    const result = await set.call(this, value, options);
     await callTriggers(hooks[`after${triggerName}`], this, value, options);
     return result;
   };
@@ -55,7 +56,7 @@ function wrapModels(models, options) {
         await callTriggers(hooks[name].beforeCreate, this, options);
       }
       await callTriggers(hooks[name].beforeUpdate, this, options);
-      const result = save.call(this, options);
+      const result = await save.call(this, options);
       if (!this.id) {
         await callTriggers(hooks[name].afterCreate, this, options);
       }
@@ -97,7 +98,7 @@ function wrapModels(models, options) {
   });
 
   // enhance models
-  _.each(_.defaultsDeep(defaults, options), (name, settings) => {
+  _.each(_.defaultsDeep(defaults, options), (settings, name) => {
     if (settings !== false) {
       _.each(models, model => enhancers[name](model, hooks, settings));
     }
