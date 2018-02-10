@@ -83,4 +83,59 @@ console.log(task1.deletedBy);
 
 ### Tracking
 
-This extension enables to track changes instance changes.
+This extension enables to track changes instance changes. You can define what models will be tracked using the option `history` and you can define what associated fields will be tracked using `extendHistory` option when creating the association.
+```
+const Project = sequelize.define('project', {
+  name: DataTypes.STRING(255),
+}, { 
+  history: true 
+});
+const Task = sequelize.define('project', {
+  name: DataTypes.STRING(255),
+}, { 
+  history: false 
+});
+const User = sequelize.define('project', {
+  username: DataTypes.STRING(255),
+}, { 
+  history: false 
+});
+Task.belongsTo(Project);
+User.belongsToMany(Project, { through: 'userProjects' );
+Project.belongsToMany(User, { through: 'userProjects', extendHistory: true });
+Project.hasMany(Task, { extendHistory: true });
+
+extendSequelize(db, {
+  tracking: { log: console.log }
+});
+
+const project = await Project.create({ name: 'My Project' });
+// [
+//   type: 'UPDATE',
+//   reference: 'project-1',
+//   data: {
+//     id: 1,
+//     type: 'project',
+//     before: {},
+//     after: { name: 'My Project' }
+//   },
+//   executionTime: 1000 (nanoseconds)
+// ]
+const user = await User.create({ name: 'Gabriel' });
+await project.addUser(user);
+// [
+//   reference: 'project-1',
+//   ...
+//     before: { users: [] },
+//     after: { users: [{ id: 1, name: 'Gabriel'}] }
+//   ...
+// ]
+const task = await Task.create({ name: 'Test', projectId: 1 });
+// [
+//   reference: 'project-1',
+//   ...
+//     before: { tasks: [] },
+//     after: { tasks: [{ id: 1, name: 'Test'}] }
+//   ...
+// ]
+```
