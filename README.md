@@ -44,7 +44,7 @@ extendSequelize(db, {
 
 ### Tracking
 
-This extension enables to track changes instance changes. You can define what models will be tracked using the option `history` and you can define what associated fields will be tracked using `extendHistory` option when creating the association.
+This extension enables to track instance changes. You can define what models will be tracked using the option `history` and you can define what associated fields will be tracked using `extendHistory` option when creating the association. `extendHistory` is `false` by default.
 ```
 const Project = sequelize.define('project', {
   name: DataTypes.STRING(255),
