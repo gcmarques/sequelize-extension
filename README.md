@@ -82,13 +82,13 @@ const project = await Project.create({ name: 'My Project' });
 //   },
 //   executionTime: 1000 (nanoseconds)
 // ]
-const user = await User.create({ name: 'Gabriel' });
+const user = await User.create({ username: 'gabriel@test.com' });
 await project.addUser(user);
 // [
 //   reference: 'project-1',
 //   ...
 //     before: { users: [] },
-//     after: { users: [{ id: 1, name: 'Gabriel'}] }
+//     after: { users: [{ id: 1, username: 'gabriel@test.com' }] }
 //   ...
 // ]
 const task = await Task.create({ name: 'Test', projectId: 1 });
