@@ -57,6 +57,8 @@ utils.getAttributeValues = attribute => attribute.values;
 
 utils.isNullableAttribute = attribute => !!attribute.allowNull;
 
+utils.isModel = model => model && !!model.options.sequelize;
+
 utils.getName = model => model.name;
 
 utils.getOptions = model => model.options;

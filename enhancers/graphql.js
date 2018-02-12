@@ -59,10 +59,10 @@ function getResolver(model, type, resolver, gts) {
   return val;
 }
 
-function enhance(model, hooks, settings) {
+function enhanceModel(model, hooks, settings) {
   const { gts } = settings;
   if (!gts) {
-    throw new Error('The graphql enhance requires a booted gts');
+    throw new Error('The graphql enhancer requires a booted gts');
   }
   const name = utils.getName(model);
   const attributes = utils.getRawAttributes(model);
@@ -145,6 +145,14 @@ function enhance(model, hooks, settings) {
       } else {
         model.graphql.methods.resolvers[action] = aux;
       }
+    }
+  });
+}
+
+function enhance(db, hooks, settings) {
+  _.each(db, (model) => {
+    if (utils.isModel(model)) {
+      enhanceModel(model, hooks, settings);
     }
   });
 }

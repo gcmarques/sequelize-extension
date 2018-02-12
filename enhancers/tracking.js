@@ -263,7 +263,7 @@ function afterUpdateAssociation(as, log) {
   };
 }
 
-function enhance(model, hooks, settings) {
+function enhanceModel(model, hooks, settings) {
   const name = utils.getName(model);
   const modelOptions = utils.getOptions(model);
   const associations = utils.getAssociations(model);
@@ -329,4 +329,13 @@ function enhance(model, hooks, settings) {
     };
   }
 }
+
+function enhance(db, hooks, settings) {
+  _.each(db, (model) => {
+    if (utils.isModel(model)) {
+      enhanceModel(model, hooks, settings);
+    }
+  });
+}
+
 module.exports = enhance;

@@ -3,11 +3,6 @@ const inflection = require('inflection');
 const utils = require('./utils');
 const enhancers = require('./enhancers');
 
-const defaults = {};
-_.each(enhancers, (enhancer, key) => {
-  defaults[key] = {};
-});
-
 function wrappedOptions(options) {
   options = options || {};
   options.__gsm = {};
@@ -15,9 +10,9 @@ function wrappedOptions(options) {
   return options;
 }
 
-async function callTriggers(triggers, ...params) {
-  for (let i = 0; i < triggers.length; i += 1) {
-    const fn = triggers[i];
+async function callHooks(hooks, ...params) {
+  for (let i = 0; i < hooks.length; i += 1) {
+    const fn = hooks[i];
     await fn.call(null, ...params);
   }
 }
@@ -25,17 +20,21 @@ async function callTriggers(triggers, ...params) {
 function wrapSetter(model, functionName, hooks) {
   const set = model.prototype[functionName];
   const triggerName = _.upperFirst(functionName);
-  model.prototype[functionName] = async function wrappedSet(value, options) {
+  model.prototype[functionName] = async function wrappedSetter(value, options) {
     options = wrappedOptions(options);
-    await callTriggers(hooks[`before${triggerName}`], this, value, options);
+    await callHooks(hooks[`before${triggerName}`], this, value, options);
     const result = await set.call(this, value, options);
-    await callTriggers(hooks[`after${triggerName}`], this, value, options);
+    await callHooks(hooks[`after${triggerName}`], this, value, options);
     return result;
   };
 }
 
 function wrapModels(models, options) {
   const hooks = {};
+  const defaults = {};
+  _.each(enhancers, (enhancer, key) => {
+    defaults[key] = {};
+  });
 
   // Prepare hooks and wrap sequelize functions
   _.each(models, (model) => {
@@ -53,14 +52,14 @@ function wrapModels(models, options) {
     model.prototype.save = async function wrappedSave(options) {
       options = wrappedOptions(options);
       if (!this.id) {
-        await callTriggers(hooks[name].beforeCreate, this, options);
+        await callHooks(hooks[name].beforeCreate, this, options);
       }
-      await callTriggers(hooks[name].beforeUpdate, this, options);
+      await callHooks(hooks[name].beforeUpdate, this, options);
       const result = await save.call(this, options);
       if (!this.id) {
-        await callTriggers(hooks[name].afterCreate, this, options);
+        await callHooks(hooks[name].afterCreate, this, options);
       }
-      await callTriggers(hooks[name].afterUpdate, this, options);
+      await callHooks(hooks[name].afterUpdate, this, options);
       return result;
     };
 
@@ -100,7 +99,10 @@ function wrapModels(models, options) {
   // enhance models
   _.each(_.defaultsDeep(defaults, options), (settings, name) => {
     if (settings !== false) {
-      _.each(models, model => enhancers[name](model, hooks, settings));
+      const fn = _.isFunction(name) ? name : enhancers[name];
+      if (_.isFunction(fn)) {
+        fn(models, hooks, settings);
+      }
     }
   });
   return models;
