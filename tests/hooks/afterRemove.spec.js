@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const utils = require('../../utils');
 const extendSequelize = require('../../');
 const connection = require('../helpers/connection');
