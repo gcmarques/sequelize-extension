@@ -65,7 +65,7 @@ const User = sequelize.define('project', {
   history: false 
 });
 Task.belongsTo(Project);
-User.belongsToMany(Project, { through: 'userProjects' );
+User.belongsToMany(Project, { through: 'userProjects' });
 Project.belongsToMany(User, { through: 'userProjects', extendHistory: true });
 Project.hasMany(Task, { extendHistory: true });
 

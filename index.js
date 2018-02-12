@@ -33,7 +33,7 @@ function wrapModels(models, options) {
   const hooks = {};
   const defaults = {};
   _.each(enhancers, (enhancer, key) => {
-    defaults[key] = {};
+    defaults[key] = false;
   });
 
   // Prepare hooks and wrap sequelize functions
@@ -101,7 +101,7 @@ function wrapModels(models, options) {
   // enhance models
   _.each(_.defaultsDeep(defaults, options), (settings, name) => {
     if (settings !== false) {
-      const fn = _.isFunction(name) ? name : enhancers[name];
+      const fn = _.isFunction(settings) ? settings : enhancers[name];
       if (_.isFunction(fn)) {
         fn(models, hooks, settings);
       }
