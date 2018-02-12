@@ -28,7 +28,7 @@ db.forEach((model) => {
 });
 
 extendSequelize(db, {
-  myExtension: (model, hooks) => { ... },
+  myExtension: (db, hooks) => { ... },
 });
 ```
 
