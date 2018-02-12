@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const connection = () => new Sequelize(
-  process.env.SEQ_MYSQL_DB || 'sequelize_extension_test',
+  process.env.SEQ_MYSQL_DB || 'sequelize_test',
   process.env.SEQ_MYSQL_USER || 'root',
   process.env.SEQ_MYSQL_PW || '',
   {

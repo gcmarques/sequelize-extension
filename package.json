@@ -40,9 +40,6 @@
     "all": true,
     "sourceMap": false,
     "instrument": true,
-    "check-coverage": true,
-    "lines": 90,
-    "functions": 90,
     "reporter": [
       "text",
       "lcov"

@@ -2,7 +2,7 @@ FROM node:9
 
 RUN apt-get install libpq-dev
 
-WORKDIR /sequelize-extension
-VOLUME /sequelize-extension
+WORKDIR /sequelize
+VOLUME /sequelize
 
-COPY . /sequelize-extension
+COPY . /sequelize
