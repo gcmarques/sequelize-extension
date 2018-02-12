@@ -1,5 +1,8 @@
 # sequelize-extension
 
+[![Build Status](https://travis-ci.org/gcmarques/sequelize-extension.svg?branch=master)](https://travis-ci.org/gcmarques/sequelize-extension)
+
+
 This module provides pre-built extensions and an interface to extend sequelize models.
 
 ### Usage
