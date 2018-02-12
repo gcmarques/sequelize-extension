@@ -31,17 +31,18 @@ db.forEach((model) => {
 });
 
 extendSequelize(db, {
-  myExtension: (db, hooks) => { ... },
+  myCustomExtension: (db, hooks) => { ... },
 });
 ```
 
 ### Built-in Extensions
 
-The built-in extensions are enabled by default. In order to disable, you can call like below:
+The built-in extensions are disabled by default. In order to enable, you can call like below:
 
 ```
 extendSequelize(db, {
-  tracking: false,
+  tracking: { log: console.log },
+  // the extension settings can also be an empty object: {}
 });
 ```
 

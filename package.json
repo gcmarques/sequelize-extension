@@ -47,6 +47,10 @@
     "include": [
       "**/*.js"
     ],
-    "exclude": []
+    "exclude": [
+      "tests/**/*.js",
+      "coverage/**/*.js",
+      ".nyc_output/**/*.js"
+    ]
   }
 }

@@ -22,9 +22,11 @@ function wrapSetter(model, functionName, hooks) {
   const triggerName = _.upperFirst(functionName);
   model.prototype[functionName] = async function wrappedSetter(value, options) {
     options = wrappedOptions(options);
-    await callHooks(hooks[`before${triggerName}`], this, value, options);
+    options.__gsm.hook = `before${triggerName}`;
+    await callHooks(hooks[options.__gsm.hook], this, value, options);
     const result = await set.call(this, value, options);
-    await callHooks(hooks[`after${triggerName}`], this, value, options);
+    options.__gsm.hook = `after${triggerName}`;
+    await callHooks(hooks[options.__gsm.hook], this, value, options);
     return result;
   };
 }
@@ -49,19 +51,39 @@ function wrapModels(models, options) {
         afterDestroy: [],
       };
 
-      const { save } = model.prototype;
-      model.prototype.save = async function wrappedSave(options) {
+      model.beforeCreate(async (self, options) => {
         options = wrappedOptions(options);
-        if (!this.id) {
-          await callHooks(hooks[name].beforeCreate, this, options);
+        await callHooks(hooks[name].beforeCreate, self, options);
+      });
+      model.afterCreate(async (self, options) => {
+        options = wrappedOptions(options);
+        await callHooks(hooks[name].afterCreate, self, options);
+      });
+      model.beforeUpdate(async (self, options) => {
+        options = wrappedOptions(options);
+        await callHooks(hooks[name].beforeUpdate, self, options);
+      });
+      model.afterUpdate(async (self, options) => {
+        options = wrappedOptions(options);
+        await callHooks(hooks[name].afterUpdate, self, options);
+      });
+
+      const { update } = model;
+      model.update = function wrappedUpdate(values, options) {
+        options = wrappedOptions(options);
+        if (!_.has(options, 'individualHooks')) {
+          options.individualHooks = true;
         }
-        await callHooks(hooks[name].beforeUpdate, this, options);
-        const result = await save.call(this, options);
-        if (!this.id) {
-          await callHooks(hooks[name].afterCreate, this, options);
+        return update.call(this, values, options);
+      };
+
+      const { bulkCreate } = model;
+      model.bulkCreate = function wrappedBulkCreate(values, options) {
+        options = wrappedOptions(options);
+        if (!_.has(options, 'individualHooks')) {
+          options.individualHooks = true;
         }
-        await callHooks(hooks[name].afterUpdate, this, options);
-        return result;
+        return bulkCreate.call(this, values, options);
       };
 
       _.each(utils.getAssociations(model), (association) => {

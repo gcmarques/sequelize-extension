@@ -6,8 +6,8 @@ async function dropAll(sequelize) {
       FROM information_schema.tables
       WHERE table_schema = (SELECT DATABASE());
   `);
-  if (result.tables) {
-    await sequelize.query(`DROP TABLE IF EXISTS ${result.tables};`);
+  if (result.length && result[0].length && result[0][0].tables) {
+    await sequelize.query(`DROP TABLE IF EXISTS ${result[0][0].tables};`);
   }
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
 }
