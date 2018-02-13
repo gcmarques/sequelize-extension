@@ -32,7 +32,7 @@ before_script:
 script:
   - 'if [ "$INSTALL_MODULE" ]; then yarn add ${INSTALL_MODULE}; fi'
   - yarn run lint
-  - "if [ $COVERAGE ]; then yarn run cover; else yarn run test; fi"
+  - "if [ $COVERAGE ]; then yarn run cover && bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info; else yarn run test; fi"
 
 jobs:
   include:

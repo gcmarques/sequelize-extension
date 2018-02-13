@@ -42,6 +42,7 @@ function wrapModels(models, options) {
   _.each(models, (model) => {
     if (utils.isModel(model)) {
       const name = utils.getName(model);
+      const modelOptions = utils.getOptions(model);
       hooks[name] = {
         beforeUpdate: [],
         afterUpdate: [],
@@ -67,6 +68,15 @@ function wrapModels(models, options) {
         options = wrappedOptions(options);
         await callHooks(hooks[name].afterUpdate, self, options);
       });
+      model.beforeDestroy(async (self, options) => {
+        options = wrappedOptions(options);
+        options.fields = self.changed() || [];
+        await callHooks(hooks[name].beforeDestroy, self, options);
+      });
+      model.afterDestroy(async (self, options) => {
+        options = wrappedOptions(options);
+        await callHooks(hooks[name].afterDestroy, self, options);
+      });
 
       const { update } = model;
       model.update = function wrappedUpdate(values, options) {
@@ -84,6 +94,53 @@ function wrapModels(models, options) {
           options.individualHooks = true;
         }
         return bulkCreate.call(this, values, options);
+      };
+
+      const { destroy } = model;
+      model.destroy = async function wrappedDestroy(options) {
+        options = wrappedOptions(options);
+        if (!_.has(options, 'individualHooks')) {
+          options.individualHooks = true;
+        }
+        options.fields = ['deletedAt'];
+
+        let result;
+        if (!options.individualHooks) {
+          result = await destroy.call(this, options);
+        } else {
+          // This allows the hook to change fields while destroying
+          const now = new Date();
+          const instances = await model.findAll({
+            where: options.where,
+            include: options.include,
+          });
+          if (instances.length) {
+            for (let i = 0; i < instances.length; i += 1) {
+              await callHooks(hooks[name].beforeDestroy, instances[i], options);
+            }
+            const id = [];
+            _.each(instances, (instance) => { id.push(instance.id); });
+            if (!modelOptions.paranoid || options.force) {
+              result = await destroy.call(this, {
+                hooks: false,
+                where: { id, deletedAt: null },
+              });
+            } else {
+              _.each(instances, (instance) => { instance.setDataValue('deletedAt', now); });
+              const values = _.pick(instances[0], options.fields);
+              await update.call(this, values, {
+                hooks: false,
+                where: { id, deletedAt: null },
+              });
+            }
+            for (let i = 0; i < instances.length; i += 1) {
+              await callHooks(hooks[name].afterDestroy, instances[i], options);
+            }
+          } else {
+            result = 0;
+          }
+        }
+        return result;
       };
 
       _.each(utils.getAssociations(model), (association) => {
@@ -121,10 +178,14 @@ function wrapModels(models, options) {
   });
 
   // enhance models
-  _.each(_.defaultsDeep(defaults, options), (settings, name) => {
+  _.each(_.defaults({}, options, defaults), (settings, name) => {
     if (settings !== false) {
       const fn = _.isFunction(settings) ? settings : enhancers[name];
       if (_.isFunction(fn)) {
+        if (!_.isPlainObject(settings)) {
+          settings = {};
+        }
+        settings.utils = utils;
         fn(models, hooks, settings);
       }
     }

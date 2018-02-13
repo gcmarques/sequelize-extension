@@ -7,6 +7,7 @@ const connection = () => new Sequelize(
   {
     port: process.env.SEQ_MYSQL_PORT || '3306',
     host: process.env.SEQ_MYSQL_HOST || '127.0.0.1',
+    // logging: m => global.console.log(m),
     logging: false,
     dialect: 'mysql',
   },
