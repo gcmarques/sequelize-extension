@@ -5,6 +5,12 @@
 
 This module provides pre-built extensions and an interface to extend sequelize models.
 
+### Installation
+```
+$ npm install --save sequelize
+$ npm install --save sequelize-extension
+```
+
 ### Usage
 
 ```
