@@ -2,6 +2,19 @@ const _ = require('lodash');
 
 const utils = {};
 
+utils.getSequelize = model => model.sequelize;
+
+utils.getBulkedInstances = async (model, options) => {
+  if (options.__gsm.__instances === undefined) {
+    options.__gsm.__instances = await model.findAll({
+      where: options.where,
+      include: options.include,
+      transaction: options.transaction,
+    });
+  }
+  return options.__gsm.__instances;
+};
+
 utils.setTriggerParams = (options, scope, params) => {
   if (!options.__gsm[scope]) {
     options.__gsm[scope] = {};
@@ -9,13 +22,14 @@ utils.setTriggerParams = (options, scope, params) => {
   options.__gsm[scope] = _.extend(options.__gsm[scope], params);
 };
 
-
 utils.getTriggerParams = (options, scope) => {
   if (!options.__gsm[scope]) {
     options.__gsm[scope] = {};
   }
   return options.__gsm[scope];
 };
+
+utils.getTriggerType = options => options.__gsm.hook;
 
 utils.getUser = (options) => {
   const user = options ? options.user : null;
@@ -53,9 +67,13 @@ utils.getAttributeType = (attribute) => {
   return type;
 };
 
+utils.isNewRecord = instance => instance && instance._options && instance._options.isNewRecord;
+
 utils.getAttributeValues = attribute => attribute.values;
 
 utils.isNullableAttribute = attribute => !!attribute.allowNull;
+
+utils.isInstance = value => value && value.dataValues;
 
 utils.isModel = model => model && !!model.options.sequelize;
 

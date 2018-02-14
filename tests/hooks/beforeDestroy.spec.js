@@ -65,7 +65,7 @@ describe('hooks', () => {
       assert.equal(userId, 1);
     });
 
-    it('should send user within the options when bulk destroying', async () => {
+    it('should NOT send user within the options when bulk destroying', async () => {
       let userId;
       fn = (self, options) => { userId = options.user.id; };
       await db.user.create({ username });
@@ -73,17 +73,7 @@ describe('hooks', () => {
         where: { id: { ne: null } },
         user: { id: 2 },
       });
-      assert.equal(userId, 2);
-    });
-
-    it('should send defalt user within the options when bulk destroying and options.user is empty', async () => {
-      let userId;
-      fn = (self, options) => { userId = options.user.id; };
-      await db.user.create({ username });
-      await db.user.destroy({
-        where: { id: { ne: null } },
-      });
-      assert.equal(userId, 1);
+      assert.equal(userId, undefined);
     });
   });
 });

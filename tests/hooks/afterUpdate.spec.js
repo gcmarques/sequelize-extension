@@ -42,7 +42,6 @@ describe('hooks', () => {
 
   describe('-> afterUpdate:', () => {
     let fn;
-    const title = TEST;
     const username = TEST;
     const extension = {
       afterUpdateTest: (db, hooks) => {
@@ -88,32 +87,6 @@ describe('hooks', () => {
       user.username += '-changed';
       await user.save();
       assert.equal(counter.user, 1);
-    });
-
-    it('should call handler after target association setters (1:M)', async () => {
-      const counter = { user: 0, task: 0 };
-      fn = (self) => { counter[utils.getName(self.constructor)] += 1; };
-      const user1 = await db.user.create({ username });
-      assert.equal(counter.user, 0);
-      const user2 = await db.user.create({ username });
-      assert.equal(counter.user, 0);
-      const task = await db.task.create({ title, userId: user1.id });
-      assert.equal(counter.task, 0);
-      await user2.setTasks([task]);
-      assert.equal(counter.task, 1);
-    });
-
-    it('should call handler after source association setters (1:M)', async () => {
-      const counter = { user: 0, task: 0 };
-      fn = (self) => { counter[utils.getName(self.constructor)] += 1; };
-      const user1 = await db.user.create({ username });
-      assert.equal(counter.user, 0);
-      const user2 = await db.user.create({ username });
-      assert.equal(counter.user, 0);
-      const task = await db.task.create({ title, userId: user1.id });
-      assert.equal(counter.task, 0);
-      await task.setUser(user2);
-      assert.equal(counter.task, 1);
     });
   });
 });

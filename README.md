@@ -32,7 +32,7 @@ db.forEach((model) => {
 
 extendSequelize(db, {
   myCustomExtension: (db, hooks, settings) => {
-    const utils = settins.utils;
+    const { utils } = settins;
     _.each(db, (model) => {
       if (utils.isModel(model)) {
         _.each(utils.getAssociations(model), (association) => {

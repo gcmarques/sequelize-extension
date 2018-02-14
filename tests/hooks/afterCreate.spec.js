@@ -76,7 +76,7 @@ describe('hooks', () => {
       assert.equal(counter.user, 1);
     });
 
-    it('should call handler after bulk creating instances', async () => {
+    it('should NOT call handler after bulk creating instances', async () => {
       const counter = { user: 0 };
       fn = (self) => { counter[utils.getName(self.constructor)] += 1; };
       await db.user.bulkCreate([
@@ -84,7 +84,7 @@ describe('hooks', () => {
         { username },
         { username },
       ]);
-      assert.equal(counter.user, 3);
+      assert.equal(counter.user, 0);
     });
 
     it('should NOT call handler after updating instances', async () => {

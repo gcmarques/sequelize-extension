@@ -5,7 +5,9 @@ const enhancers = require('./enhancers');
 
 function wrappedOptions(options) {
   options = options || {};
-  options.__gsm = {};
+  if (!options.__gsm) {
+    options.__gsm = {};
+  }
   options.user = utils.getUser(options);
   return options;
 }
@@ -22,11 +24,12 @@ function wrapSetter(model, functionName, hooks) {
   const triggerName = _.upperFirst(functionName);
   model.prototype[functionName] = async function wrappedSetter(value, options) {
     options = wrappedOptions(options);
-    options.__gsm.hook = `before${triggerName}`;
-    await callHooks(hooks[options.__gsm.hook], this, value, options);
+    if (!options.__gsm.hook) {
+      options.__gsm.hook = functionName;
+    }
+    await callHooks(hooks[`before${triggerName}`], this, value, options);
     const result = await set.call(this, value, options);
-    options.__gsm.hook = `after${triggerName}`;
-    await callHooks(hooks[options.__gsm.hook], this, value, options);
+    await callHooks(hooks[`after${triggerName}`], this, value, options);
     return result;
   };
 }
@@ -42,106 +45,105 @@ function wrapModels(models, options) {
   _.each(models, (model) => {
     if (utils.isModel(model)) {
       const name = utils.getName(model);
-      const modelOptions = utils.getOptions(model);
       hooks[name] = {
         beforeUpdate: [],
         afterUpdate: [],
+        beforeBulkUpdate: [],
+        afterBulkUpdate: [],
         beforeCreate: [],
         afterCreate: [],
+        beforeBulkCreate: [],
+        afterBulkCreate: [],
         beforeDestroy: [],
         afterDestroy: [],
+        beforeBulkDestroy: [],
+        afterBulkDestroy: [],
       };
 
-      model.beforeCreate(async (self, options) => {
+      model.beforeCreate(async (values, options) => {
         options = wrappedOptions(options);
-        await callHooks(hooks[name].beforeCreate, self, options);
-      });
-      model.afterCreate(async (self, options) => {
-        options = wrappedOptions(options);
-        await callHooks(hooks[name].afterCreate, self, options);
-      });
-      model.beforeUpdate(async (self, options) => {
-        options = wrappedOptions(options);
-        await callHooks(hooks[name].beforeUpdate, self, options);
-      });
-      model.afterUpdate(async (self, options) => {
-        options = wrappedOptions(options);
-        await callHooks(hooks[name].afterUpdate, self, options);
-      });
-      model.beforeDestroy(async (self, options) => {
-        options = wrappedOptions(options);
-        options.fields = self.changed() || [];
-        await callHooks(hooks[name].beforeDestroy, self, options);
-      });
-      model.afterDestroy(async (self, options) => {
-        options = wrappedOptions(options);
-        await callHooks(hooks[name].afterDestroy, self, options);
-      });
-
-      const { update } = model;
-      model.update = function wrappedUpdate(values, options) {
-        options = wrappedOptions(options);
-        if (!_.has(options, 'individualHooks')) {
-          options.individualHooks = true;
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'CREATE';
         }
-        return update.call(this, values, options);
-      };
-
-      const { bulkCreate } = model;
-      model.bulkCreate = function wrappedBulkCreate(values, options) {
+        await callHooks(hooks[name].beforeCreate, values, options);
+      });
+      model.afterCreate(async (values, options) => {
         options = wrappedOptions(options);
-        if (!_.has(options, 'individualHooks')) {
-          options.individualHooks = true;
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'CREATE';
         }
-        return bulkCreate.call(this, values, options);
-      };
-
-      const { destroy } = model;
-      model.destroy = async function wrappedDestroy(options) {
+        await callHooks(hooks[name].afterCreate, values, options);
+      });
+      model.beforeBulkCreate(async (values, options) => {
         options = wrappedOptions(options);
-        if (!_.has(options, 'individualHooks')) {
-          options.individualHooks = true;
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKCREATE';
         }
-        options.fields = ['deletedAt'];
-
-        let result;
-        if (!options.individualHooks) {
-          result = await destroy.call(this, options);
-        } else {
-          // This allows the hook to change fields while destroying
-          const now = new Date();
-          const instances = await model.findAll({
-            where: options.where,
-            include: options.include,
-          });
-          if (instances.length) {
-            for (let i = 0; i < instances.length; i += 1) {
-              await callHooks(hooks[name].beforeDestroy, instances[i], options);
-            }
-            const id = [];
-            _.each(instances, (instance) => { id.push(instance.id); });
-            if (!modelOptions.paranoid || options.force) {
-              result = await destroy.call(this, {
-                hooks: false,
-                where: { id, deletedAt: null },
-              });
-            } else {
-              _.each(instances, (instance) => { instance.setDataValue('deletedAt', now); });
-              const values = _.pick(instances[0], options.fields);
-              await update.call(this, values, {
-                hooks: false,
-                where: { id, deletedAt: null },
-              });
-            }
-            for (let i = 0; i < instances.length; i += 1) {
-              await callHooks(hooks[name].afterDestroy, instances[i], options);
-            }
-          } else {
-            result = 0;
-          }
+        await callHooks(hooks[name].beforeBulkCreate, values, options);
+      });
+      model.afterBulkCreate(async (values, options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKCREATE';
         }
-        return result;
-      };
+        await callHooks(hooks[name].afterBulkCreate, values, options);
+      });
+      model.beforeUpdate(async (values, options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'UPDATE';
+        }
+        await callHooks(hooks[name].beforeUpdate, values, options);
+      });
+      model.afterUpdate(async (values, options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'UPDATE';
+        }
+        await callHooks(hooks[name].afterUpdate, values, options);
+      });
+      model.beforeBulkUpdate(async (options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKUPDATE';
+        }
+        await callHooks(hooks[name].beforeBulkUpdate, options);
+      });
+      model.afterBulkUpdate(async (options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKUPDATE';
+        }
+        await callHooks(hooks[name].afterBulkUpdate, options);
+      });
+      model.beforeDestroy(async (values, options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'DESTROY';
+        }
+        await callHooks(hooks[name].beforeDestroy, values, options);
+      });
+      model.afterDestroy(async (values, options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'DESTROY';
+        }
+        await callHooks(hooks[name].afterDestroy, values, options);
+      });
+      model.beforeBulkDestroy(async (options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKDESTROY';
+        }
+        await callHooks(hooks[name].beforeBulkDestroy, options);
+      });
+      model.afterBulkDestroy(async (options) => {
+        options = wrappedOptions(options);
+        if (!options.__gsm.hook) {
+          options.__gsm.hook = 'BULKDESTROY';
+        }
+        await callHooks(hooks[name].afterBulkDestroy, options);
+      });
 
       _.each(utils.getAssociations(model), (association) => {
         const as = utils.getAssociationAs(association);
