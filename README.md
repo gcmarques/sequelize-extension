@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/gcmarques/sequelize-extension.svg?branch=master)](https://travis-ci.org/gcmarques/sequelize-extension)
 [![codecov](https://codecov.io/gh/gcmarques/sequelize-extension/branch/master/graph/badge.svg)](https://codecov.io/gh/gcmarques/sequelize-extension)
+![GitHub license](https://img.shields.io/github/license/gcmarques/sequelize-extension.svg)
 
 This module provides pre-built extensions and an interface to extend sequelize models.
 
@@ -38,7 +39,7 @@ db.forEach((model) => {
 
 extendSequelize(db, {
   myCustomExtension: (db, hooks, settings) => {
-    const { utils } = settins;
+    const { utils } = settings;
     _.each(db, (model) => {
       if (utils.isModel(model)) {
         _.each(utils.getAssociations(model), (association) => {
