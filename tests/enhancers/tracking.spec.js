@@ -787,5 +787,31 @@ describe('enhancers', () => {
         userId: 2,
       }]);
     });
+
+    it('should track when list associated instances are updated (n:m)', async () => {
+      const project = await db.project.findById(1);
+      logs = [];
+      project.name += '-changed';
+      await project.save(OPTIONS());
+      expect(omit(logs, 'executionTime')).to.deep.equal([{
+        type: 'UPDATE',
+        reference: 'user-2',
+        data: {
+          id: 2,
+          type: 'user',
+          before: {
+            projects: [
+              { id: 1, name: TEST(9) },
+            ],
+          },
+          after: {
+            projects: [
+              { id: 1, name: `${TEST(9)}-changed` },
+            ],
+          },
+        },
+        userId: 2,
+      }]);
+    });
   });
 });

@@ -659,6 +659,94 @@ function afterThroughSetter(as, log) {
   };
 }
 
+function beforeUpdateThroughAssociation(model, association, target, pairedAssociation) {
+  const scope = getScope(model, association);
+  const targetScope = getScope(target, pairedAssociation);
+  return async function wrappedBeforeUpdateThroughAssociation(instances, options) {
+    if (!options) {
+      options = instances;
+      instances = null;
+    }
+    if (isSetter(options)) {
+      return;
+    }
+    if (!options.transaction) {
+      const transaction = await scope.sequelize.transaction();
+      options.transaction = transaction;
+      utils.setTriggerParams(options, 'tracking', { transaction });
+    }
+    if (instances === null) {
+      instances = await utils.getBulkedInstances(model, options);
+    } else if (!_.isArray(instances)) {
+      instances = [instances];
+    }
+    let targets = [];
+    for (let i = 0; i < instances.length; i += 1) {
+      const parents = await scope.get(instances[i].id, options.transaction, true);
+      Array.prototype.push.apply(targets, parents);
+    }
+    targets = _.uniqBy(targets, 'id');
+    for (let i = 0; i < targets.length; i += 1) {
+      setScopeKey(options, i);
+      const trackingKey = getTrackingKey(model, options);
+      perfy.start(trackingKey);
+      const before = {};
+      before[targetScope.as] = await targetScope.get(targets[i].id, options.transaction);
+      utils.setTriggerParams(options, getScopeKey(options), {
+        before, trackingKey, targetScope,
+      });
+    }
+    utils.setTriggerParams(options, 'tracking', { targets });
+  };
+}
+
+function afterUpdateThroughAssociation(log) {
+  return async function wrappedBeforeUpdateThroughAssociation(instances, options) {
+    if (!options) {
+      options = instances;
+      instances = null;
+    }
+    if (isSetter(options)) {
+      return;
+    }
+    const { transaction, targets } = utils.getTriggerParams(options, 'tracking');
+    const logs = [];
+    for (let i = 0; i < targets.length; i += 1) {
+      setScopeKey(options, i);
+      const {
+        before,
+        trackingKey,
+        targetScope,
+      } = utils.getTriggerParams(options, getScopeKey(options));
+      const after = {};
+      after[targetScope.as] = await targetScope.get(targets[i].id, options.transaction);
+      logs.push({
+        type: 'UPDATE',
+        reference: `${targetScope.name}-${targets[i].id}`,
+        data: {
+          type: targetScope.name,
+          id: targets[i].id,
+          before,
+          after,
+        },
+        executionTime: perfy.end(trackingKey).nanoseconds,
+        userId: options.user.id,
+      });
+    }
+    if (transaction) {
+      try {
+        await transaction.commit();
+      } catch (err) {
+        await transaction.rollback();
+        throw err;
+      }
+    }
+    if (logs.length) {
+      await log(logs);
+    }
+  };
+}
+
 function enhanceModel(model, hooks, settings) {
   const name = utils.getName(model);
   const modelOptions = utils.getOptions(model);
@@ -716,8 +804,28 @@ function enhanceModel(model, hooks, settings) {
 
     // Add update hooks for BelongsTo associations. If Project has Task and Task is
     // updated, it should be logged in Project (if extendHistory is TRUE).
-    const foreignKey = utils.getAssociationForeignKey(association);
-    if (utils.isBelongsToAssociation(association) && !utils.hasThroughAssociation(association)) {
+    if (utils.hasThroughAssociation(association)) {
+      const pairedAssociation = association.paired;
+      if (pairedAssociation && utils.getAssociationOptions(pairedAssociation).extendHistory) {
+        const target = utils.getAssociationTarget(association);
+        const beforeHandler = beforeUpdateThroughAssociation(
+          model,
+          association,
+          target,
+          pairedAssociation,
+        );
+        const afterHandler = afterUpdateThroughAssociation(log);
+        hooks[name].beforeUpdate.push(beforeHandler);
+        hooks[name].afterUpdate.push(afterHandler);
+        hooks[name].beforeDestroy.push(beforeHandler);
+        hooks[name].afterDestroy.push(afterHandler);
+        hooks[name].beforeBulkUpdate.push(beforeHandler);
+        hooks[name].afterBulkUpdate.push(afterHandler);
+        hooks[name].beforeBulkDestroy.push(beforeHandler);
+        hooks[name].afterBulkDestroy.push(afterHandler);
+      }
+    } else if (utils.isBelongsToAssociation(association)) {
+      const foreignKey = utils.getAssociationForeignKey(association);
       let pairedAssociation = null;
       _.each(utils.getAssociations(utils.getAssociationTarget(association)), (a) => {
         const target = utils.getAssociationTarget(a);
