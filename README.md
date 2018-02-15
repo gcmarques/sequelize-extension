@@ -225,7 +225,7 @@ type user {
   # Authenticate \[user\]() with username and password.
   authenticate(with: AuthenticateUserInput!): JSON!
 
-  # Create new [user]() entity, optionally with specified attributes (`with`)
+  # Create \[user\]() with a json.
   create(with: JSON): user!
 
   # Clone one [user]() entity by cloning its attributes (but not its relationships).
