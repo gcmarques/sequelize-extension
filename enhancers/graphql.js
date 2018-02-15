@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const utils = require('../utils');
+const GraphQLTools = require('graphql-tools');
+const GraphQLToolsTypes = require('graphql-tools-types');
 
 function getType(attribute) {
   let type = utils.getAttributeType(attribute);
@@ -159,11 +161,47 @@ function enhanceModel(model, hooks, settings) {
 }
 
 function enhance(db, hooks, settings) {
+  let methods = '';
+  let enums = '';
+  let inputs = '';
+  const types = [];
+  const resolvers = {
+    UUID: GraphQLToolsTypes.UUID({ name: 'UUID', storage: 'string' }),
+    JSON: GraphQLToolsTypes.JSON({ name: 'JSON' }),
+    Jsontype: GraphQLToolsTypes.JSON({ name: 'Jsontype' }),
+    Date: GraphQLToolsTypes.Date({ name: 'Date' }),
+    root: {},
+  };
+
   _.each(db, (model) => {
     if (utils.isModel(model)) {
       enhanceModel(model, hooks, settings);
+      enums += model.graphql.enums;
+      inputs += model.graphql.inputs;
+      types.push(model.graphql.type());
+      resolvers[model.name] = model.graphql.resolvers;
+      methods += model.graphql.methods.attributes;
+      _.extend(resolvers.root, model.graphql.methods.resolvers);
     }
   });
+
+  const typeDefs = `
+    schema {
+      query: root
+      mutation: root
+    }
+    scalar UUID
+    scalar JSON
+    scalar Jsontype
+    scalar Date
+    ${enums}
+    ${inputs}
+    type root {
+      ${methods}
+    }
+    ${types.join('')}`;
+    
+  db.getGraphQLExecutableSchema = () => GraphQLTools.makeExecutableSchema({ typeDefs, resolvers });
 }
 
 module.exports = enhance;

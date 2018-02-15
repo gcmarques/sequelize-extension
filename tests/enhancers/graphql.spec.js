@@ -29,6 +29,7 @@ describe('enhancers', () => {
       extendSequelize(db, {
         graphql: { gts },
       });
+      db.getGraphQLExecutableSchema();
     });
   });
 });
