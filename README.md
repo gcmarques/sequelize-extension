@@ -67,7 +67,7 @@ extendSequelize(db, {
 ### Tracking
 
 This extension enables to track instance changes. You can define what models will be tracked using the option `history` and you can define what associated fields will be tracked using `extendHistory` option when creating the association. `extendHistory` is `false` by default.
-```
+```javascript
 const Project = sequelize.define('project', {
   name: DataTypes.STRING(255),
 }, { 
@@ -138,7 +138,8 @@ await gts.boot();
 // `schema` is required.
 // `resolver` is required.
 db.User.mutations = {};
-db.User.mutations.authenticate = {
+const { mutations } = db.User;
+mutations.authenticate = {
   input: `
     AuthenticateUserInput {
       username: String
@@ -156,7 +157,8 @@ db.User.mutations.authenticate = {
 
 // You can add custom queries
 db.User.queries = {};
-db.User.queries.pendingEmails = {
+const { queries } = db.User;
+queries.pendingEmails = {
   schema: `...`
   resolver: async (_, input, ctx) => {
     ...
@@ -164,7 +166,7 @@ db.User.queries.pendingEmails = {
 };
 
 // You can overwrite the default queries and mutations created by GTS.
-db.User.mutations.create = {
+mutations.create = {
   schema: `
     # Create \[user\]() with a json.
     create(with: JSON!): User!
