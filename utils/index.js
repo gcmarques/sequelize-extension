@@ -75,7 +75,7 @@ utils.isNullableAttribute = attribute => !!attribute.allowNull;
 
 utils.isInstance = value => value && value.dataValues;
 
-utils.isModel = model => model && !!model.options.sequelize;
+utils.isModel = model => model && model.options && !!model.options.sequelize;
 
 utils.getName = model => model.name;
 
