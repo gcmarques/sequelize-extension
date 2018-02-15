@@ -98,7 +98,7 @@ function enhanceModel(model, hooks, settings) {
       if (type === 'Enum') {
         model.graphql.enumCount += 1;
         type = `${name}Enum${model.graphql.enumCount}`;
-        model.graphql.enums += `enum ${type} {\n${utils.getAttributeValues(attribute).replace(/ +/g, '_').join('\n')}\n}\n`;
+        model.graphql.enums += `enum ${type} {\n${utils.getAttributeValues(attribute).join('\n').replace(/ +/g, '_')}\n}\n`;
       }
       model.graphql.attributes += `${key}: ${type}${!utils.isNullableAttribute(attribute) ? '!' : ''}\n`;
     }
