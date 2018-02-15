@@ -14,7 +14,7 @@ $ npm install --save sequelize-extension
 
 ### Usage
 
-```nodejs
+```javascript
 const Sequelize = require('sequelize');
 const extendSequelize = require('sequelize-extension');
 
@@ -57,7 +57,7 @@ extendSequelize(db, {
 
 The built-in extensions are disabled by default. In order to enable, you can call like below:
 
-```nodejs
+```javascript
 extendSequelize(db, {
   tracking: { log: console.log },
   // the extension settings can also be an empty object: {}
@@ -127,7 +127,7 @@ const task = await Task.create({ name: 'Test', projectId: 1 });
 
 This extension uses [graphql-tools-sequelize](https://github.com/rse/graphql-tools-sequelize) to generate a GraphQL schema based on the sequelize models. It is required to provided a booted `gts` instance to initialize the models.
 
-```nodejs
+```javascript
 const GraphQLToolsSequelize = require('graphql-tools-sequelize');
 ...
 const gts = new GraphQLToolsSequelize(sequelize, { idtype: 'ID' });
@@ -240,7 +240,7 @@ type user {
 ### CreatedBy
 
 If a model has a `createdBy` field, this extension will automatically add `options.user.id` to `createdBy` upon an instance is creation.
-```nodejs
+```javascript
 const task1 = await db.task.create({...}, { user: { id: 2 } });
 console.log(task1.createdBy);
 // 2
@@ -253,7 +253,7 @@ console.log(task2.createdBy);
 ### UpdatedBy
 
 If a model has a `updatedBy` field, this extension will automatically add `options.user.id` to `updatedBy`.
-```nodejs
+```javascript
 await task.save({ user: { id: 2 } });
 console.log(task1.updatedBy);
 // 2
@@ -266,7 +266,7 @@ console.log(task1.updatedBy);
 ### DeletedBy
 
 If a model has a `deletedBy` field, this extension will automatically add `options.user.id` to `deletedBy`.
-```nodejs
+```javascript
 await task.destroy({ user: { id: 2 } });
 console.log(task1.deletedBy);
 // 2
