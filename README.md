@@ -183,7 +183,7 @@ extendSequelize(db, {
 const schema = db.getGraphQLExecutableSchema();
 ```
 
-It will create an executable GraphQL schema based similar to this:
+It will create an executable GraphQL schema similar to this:
 ```graphql
 schema {
   query: root
