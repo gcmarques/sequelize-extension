@@ -125,6 +125,68 @@ const task = await Task.create({ name: 'Test', projectId: 1 });
 
 ### GraphQL
 
+This extension uses [graphql-tools-sequelize](https://github.com/rse/graphql-tools-sequelize) to generate a GraphQL schema based on the sequelize models. It is required to provided a booted `gts` instance to initialize the models.
+
+```
+const GraphQLToolsSequelize = require('graphql-tools-sequelize');
+...
+const gts = new GraphQLToolsSequelize(sequelize, { idtype: 'ID' });
+await gts.boot();
+
+// You can add custom mutations. Each mutation can have three attributes:
+// `input` is optional. If present, it will be added to the top of the schema.
+// `schema` is required.
+// `resolver` is required.
+db.User.mutations = {};
+db.User.mutations.authenticate = {
+  input: `
+    AuthenticateUserInput {
+      username: String
+      password: String
+    }`,
+  schema: `
+    # Authenticate \[user\]() with username and password.
+    authenticate(with: AuthenticateUserInput!): JSON!
+  `,
+  resolver: async (_, input, ctx) => {
+    const { username, password } = input.with;
+    ...
+  },
+};
+
+// You can add custom queries
+db.User.queries = {};
+db.User.queries.pendingEmails = {
+  schema: `...`
+  resolver: async (_, input, ctx) => {
+    ...
+  },
+};
+
+// You can overwrite the default queries and mutations created by GTS.
+db.User.mutations.create = {
+  schema: `
+    # Create \[user\]() with a json.
+    create(with: JSON!): User!
+  `,
+  resolver: async (_, input, ctx) => {
+    const { username, password } = input.with;
+    ...
+  },
+}
+
+// The extension will automatically create:
+// - create(id: ID!, with: JSON!)
+// - update(with: JSON!)
+// - clone()
+// - delete()
+// - All associated attributes and it's resolvers
+extendSequelize(db, {
+  graphql: { gts },
+});
+
+```
+
 ### CreatedBy
 
 If a model has a `createdBy` field, this extension will automatically add `options.user.id` to `createdBy` upon an instance is creation.

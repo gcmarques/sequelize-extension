@@ -6,6 +6,15 @@ function getType(attribute) {
   if (type === 'Id' || type === 'Bigint') {
     type = 'ID';
   }
+  if (type === 'Decimal') {
+    type = 'Float';
+  }
+  if (type === 'Integer') {
+    type = 'Int';
+  }
+  if (type === 'Text' || type === 'Longtext') {
+    type = 'String';
+  }
   return type;
 }
 
@@ -89,7 +98,7 @@ function enhanceModel(model, hooks, settings) {
       if (type === 'Enum') {
         model.graphql.enumCount += 1;
         type = `${name}Enum${model.graphql.enumCount}`;
-        model.graphql.enums += `enum ${type} {\n${utils.getAttributeValues(attribute).join('\n')}\n}\n`;
+        model.graphql.enums += `enum ${type} {\n${utils.getAttributeValues(attribute).replace(/ +/g, '_').join('\n')}\n}\n`;
       }
       model.graphql.attributes += `${key}: ${type}${!utils.isNullableAttribute(attribute) ? '!' : ''}\n`;
     }
