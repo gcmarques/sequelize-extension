@@ -3,12 +3,14 @@ const utils = require('../utils');
 const GraphQLTools = require('graphql-tools');
 const GraphQLToolsTypes = require('graphql-tools-types');
 
+const enumRegex = /^[_A-Za-z][_0-9A-Za-z]+$/;
+
 function getType(attribute) {
   let type = utils.getAttributeType(attribute);
   if (type === 'Id' || type === 'Bigint') {
     type = 'ID';
   }
-  if (type === 'Decimal') {
+  if (type === 'Decimal' || type === 'Double' || type === 'Real') {
     type = 'Float';
   }
   if (type === 'Integer') {
@@ -100,7 +102,29 @@ function enhanceModel(model, hooks, settings) {
       if (type === 'Enum') {
         model.graphql.enumCount += 1;
         type = `${name}Enum${model.graphql.enumCount}`;
-        model.graphql.enums += `enum ${type} {\n${utils.getAttributeValues(attribute).join('\n').replace(/ +/g, '_')}\n}\n`;
+        if (!model.graphql.enumTable[attribute]) {
+          model.graphql.enumTable[attribute] = {};
+        }
+        model.graphql.enums += `enum ${type} {\n`;
+        _.each(utils.getAttributeValues(attribute), (value, i) => {
+          let validEnum = value;
+          if (!enumRegex.test(validEnum)) {
+            validEnum = validEnum.replace(/ +/g, '_');
+            if (!enumRegex.test(validEnum)) {
+              validEnum = validEnum.replace(/-+/g, '_');
+              if (!enumRegex.test(validEnum)) {
+                if (/^[^_A-Za-z]/.test(validEnum)) {
+                  validEnum = `V_${validEnum}`;
+                }
+                validEnum = validEnum.replace(/[^_0-9A-Za-z]/g, '_');
+              }
+            }
+          }
+          model.graphql.enumTable[attribute][value] = validEnum;
+          model.graphql.enumTable[attribute][validEnum] = value;
+          model.graphql.enums += `${i > 0 ? '\n' : ''}${validEnum}`;
+        });
+        model.graphql.enums += '\n}\n';
       }
       model.graphql.attributes += `${key}: ${type}${!utils.isNullableAttribute(attribute) ? '!' : ''}\n`;
     }
