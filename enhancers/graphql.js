@@ -92,6 +92,7 @@ function enhanceModel(model, hooks, settings) {
       attributes: '',
       resolvers: {},
     },
+    enumTable: {},
     resolvers: {},
     type: () => `type ${name} {\n${model.graphql.attributes}}`,
   };
