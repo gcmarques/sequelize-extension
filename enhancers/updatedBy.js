@@ -6,6 +6,14 @@ function enhance(db, hooks) {
     if (utils.isModel(model) && _.has(utils.getRawAttributes(model), 'updatedBy')) {
       const name = utils.getName(model);
 
+      hooks[name].beforeCreate.push((instance, options) => {
+        instance.updatedBy = options.user.id;
+      });
+
+      hooks[name].beforeBulkCreate.push((instances, options) => {
+        _.each(instances, (instance) => { instance.updatedBy = options.user.id; });
+      });
+
       hooks[name].beforeUpdate.push((instance, options) => {
         instance.updatedBy = options.user.id;
       });
