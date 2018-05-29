@@ -61,6 +61,9 @@ utils.getAttributeType = (attribute) => {
   } else if (attribute.type && attribute.type.name) {
     type = _.capitalize(attribute.type.name);
   }
+  if (type === 'Virtual') {
+    type = _.capitalize(attribute.type.returnType.constructor.name);
+  }
   if (!type) {
     throw new Error('Unexpected Type');
   }

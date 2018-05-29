@@ -225,7 +225,7 @@ function enhance(db, hooks, settings) {
       ${methods}
     }
     ${types.join('')}`;
-    
+
   db.getGraphQLExecutableSchema = () => GraphQLTools.makeExecutableSchema({ typeDefs, resolvers });
 }
 
