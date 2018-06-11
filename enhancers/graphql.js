@@ -220,11 +220,15 @@ function enhance(db, hooks, settings) {
     scalar Jsontype
     scalar Date
     ${enums}
+    ${settings.enums || ''}
     ${inputs}
+    ${settings.inputs || ''}
     type root {
       ${methods}
+      ${settings.methods || ''}
     }
-    ${types.join('')}`;
+    ${types.join('')}
+    ${settings.types || ''}`;
 
   db.getGraphQLExecutableSchema = () => GraphQLTools.makeExecutableSchema({ typeDefs, resolvers });
 }
