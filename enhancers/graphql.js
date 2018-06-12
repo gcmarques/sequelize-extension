@@ -182,6 +182,9 @@ function enhanceModel(model, hooks, settings) {
         model.graphql.methods.resolvers[action] = aux;
       }
     }
+    if (definition.input) {
+      model.graphql.inputs += definition.input;
+    }
   });
 }
 
