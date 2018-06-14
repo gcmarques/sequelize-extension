@@ -142,10 +142,12 @@ function enhanceModel(model, hooks, settings) {
   });
 
   _.each(['create', 'clone', 'update', 'delete'], (action) => {
-    model.mutations[action] = {
-      schema: getSchema(model, 'mutations', action, gts),
-      resolver: getResolver(model, 'mutations', action, gts),
-    };
+    if (model.mutations[action] === undefined || model.mutations[action] === null) {
+      model.mutations[action] = {
+        schema: getSchema(model, 'mutations', action, gts),
+        resolver: getResolver(model, 'mutations', action, gts),
+      };
+    }
   });
   _.each(model.mutations, (definition, action) => {
     let aux = getSchema(model, 'mutations', action);
@@ -162,10 +164,12 @@ function enhanceModel(model, hooks, settings) {
   });
 
   _.each(['retrieve', 'list'], (action) => {
-    model.queries[action] = {
-      schema: getSchema(model, 'queries', action, gts),
-      resolver: getResolver(model, 'queries', action, gts),
-    };
+    if (model.queries[action] === undefined || model.queries[action] === null) {
+      model.queries[action] = {
+        schema: getSchema(model, 'queries', action, gts),
+        resolver: getResolver(model, 'queries', action, gts),
+      };
+    }
   });
   _.each(model.queries, (definition, action) => {
     let aux = getSchema(model, 'queries', action, gts);
