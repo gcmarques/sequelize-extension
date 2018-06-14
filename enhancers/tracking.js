@@ -160,7 +160,7 @@ async function _wrappedAfterUpdate(self, options, model, name, attributes, log) 
       },
       executionTime: perfy.end(trackingKey).nanoseconds,
       userId: options.user.id,
-    }]);
+    }], options);
   }
 }
 
@@ -201,7 +201,7 @@ function afterBulkCreate(model, log) {
       await _wrappedAfterUpdate(instances[i], options, model, name, attributes, _log);
     }
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   };
 }
@@ -252,7 +252,7 @@ function afterBulkUpdate(model, log) {
       await _wrappedAfterUpdate(instances[i], options, model, name, attributes, _log);
     }
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   };
 }
@@ -401,7 +401,7 @@ async function _wrappedAfterUpdateAssociation(self, options, as, log) {
       }
     });
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   }
 }
@@ -497,7 +497,7 @@ function afterBulkUpdateAssociation(target, as, log) {
       });
     });
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   };
 }
@@ -607,7 +607,7 @@ function afterNonThroughSetter(as, log) {
       });
     });
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   };
 }
@@ -655,7 +655,7 @@ function afterThroughSetter(as, log) {
       },
       executionTime: perfy.end(trackingKey).nanoseconds,
       userId: options.user.id,
-    }]);
+    }], options);
   };
 }
 
@@ -742,7 +742,7 @@ function afterUpdateThroughAssociation(log) {
       }
     }
     if (logs.length) {
-      await log(logs);
+      await log(logs, options);
     }
   };
 }
