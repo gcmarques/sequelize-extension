@@ -70,6 +70,8 @@ utils.getAttributeType = (attribute) => {
   return type;
 };
 
+utils.isVirtualModel = model => !!model.virtual;
+
 utils.isNewRecord = instance => instance && instance._options && instance._options.isNewRecord;
 
 utils.getAttributeValues = attribute => attribute.values;
@@ -85,7 +87,7 @@ utils.getName = model => model.name;
 utils.getOptions = model => model.options;
 
 utils.isListAssociation = association => association.associationType === 'HasMany' ||
-  (association.paired && association.paired.associationType === 'BelongsToMany');
+  association.associationType === 'BelongsToMany';
 
 utils.isBelongsToAssociation = association => association.associationType === 'BelongsTo';
 

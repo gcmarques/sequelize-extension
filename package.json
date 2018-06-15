@@ -1,6 +1,6 @@
 {
   "name": "sequelize-extension",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "This module provides an interface to extend sequelize models",
   "main": "index.js",
   "scripts": {
