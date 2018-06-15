@@ -858,7 +858,7 @@ function enhanceModel(model, hooks, settings) {
           hooks[name].beforeBulkDestroy.push(beforeHandler);
           hooks[name].afterBulkDestroy.push(afterHandler);
         }
-      } else if (utils.isBelongsToAssociation(association)) {
+      } else {
         const foreignKey = utils.getAssociationForeignKey(association);
         let pairedAssociation = null;
         _.each(utils.getAssociations(utils.getAssociationTarget(association)), (a) => {
@@ -869,32 +869,52 @@ function enhanceModel(model, hooks, settings) {
           }
         });
         if (pairedAssociation && utils.getAssociationOptions(pairedAssociation).extendHistory) {
-          const as = utils.getAssociationAs(pairedAssociation);
-          const target = utils.getAssociationTarget(association);
-          const beforeHandler = beforeUpdateAssociation(
-            model, target,
-            pairedAssociation, foreignKey,
-          );
-          const afterHandler = afterUpdateAssociation(model, as, log);
-          const beforeBulkHandler = beforeBulkUpdateAssociation(
-            model,
-            target,
-            pairedAssociation,
-            foreignKey,
-          );
-          const afterBulkHandler = afterBulkUpdateAssociation(model, as, log);
-          hooks[name].beforeCreate.push(beforeHandler);
-          hooks[name].afterCreate.push(afterHandler);
-          hooks[name].beforeUpdate.push(beforeHandler);
-          hooks[name].afterUpdate.push(afterHandler);
-          hooks[name].beforeDestroy.push(beforeHandler);
-          hooks[name].afterDestroy.push(afterHandler);
-          hooks[name].beforeBulkCreate.push(beforeBulkHandler);
-          hooks[name].afterBulkCreate.push(afterBulkHandler);
-          hooks[name].beforeBulkUpdate.push(beforeBulkHandler);
-          hooks[name].afterBulkUpdate.push(afterBulkHandler);
-          hooks[name].beforeBulkDestroy.push(beforeBulkHandler);
-          hooks[name].afterBulkDestroy.push(afterBulkHandler);
+          if (utils.isBelongsToAssociation(association)) {
+            const as = utils.getAssociationAs(pairedAssociation);
+            const target = utils.getAssociationTarget(association);
+            const beforeHandler = beforeUpdateAssociation(
+              model, target,
+              pairedAssociation, foreignKey,
+            );
+            const afterHandler = afterUpdateAssociation(model, as, log);
+            const beforeBulkHandler = beforeBulkUpdateAssociation(
+              model,
+              target,
+              pairedAssociation,
+              foreignKey,
+            );
+            const afterBulkHandler = afterBulkUpdateAssociation(model, as, log);
+            hooks[name].beforeCreate.push(beforeHandler);
+            hooks[name].afterCreate.push(afterHandler);
+            hooks[name].beforeUpdate.push(beforeHandler);
+            hooks[name].afterUpdate.push(afterHandler);
+            hooks[name].beforeDestroy.push(beforeHandler);
+            hooks[name].afterDestroy.push(afterHandler);
+            hooks[name].beforeBulkCreate.push(beforeBulkHandler);
+            hooks[name].afterBulkCreate.push(afterBulkHandler);
+            hooks[name].beforeBulkUpdate.push(beforeBulkHandler);
+            hooks[name].afterBulkUpdate.push(afterBulkHandler);
+            hooks[name].beforeBulkDestroy.push(beforeBulkHandler);
+            hooks[name].afterBulkDestroy.push(afterBulkHandler);
+          } else {
+            const as = utils.getAssociationAs(association);
+            const target = utils.getAssociationTarget(association);
+            const beforeHandler = beforeUpdateThroughAssociation(
+              model,
+              association,
+              target,
+              pairedAssociation,
+            );
+            const afterHandler = afterUpdateThroughAssociation(model, log, as);
+            hooks[name].beforeUpdate.push(beforeHandler);
+            hooks[name].afterUpdate.push(afterHandler);
+            hooks[name].beforeDestroy.push(beforeHandler);
+            hooks[name].afterDestroy.push(afterHandler);
+            hooks[name].beforeBulkUpdate.push(beforeHandler);
+            hooks[name].afterBulkUpdate.push(afterHandler);
+            hooks[name].beforeBulkDestroy.push(beforeHandler);
+            hooks[name].afterBulkDestroy.push(afterHandler);
+          }
         }
       }
     });
