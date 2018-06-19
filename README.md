@@ -95,7 +95,7 @@ Single instance triggers:
 * `beforeDestroy` (instance: Model, options: Object)
 * `afterDestroy` (instance: Model, options: Object)
 
-For bulk triggers, you can pull the bulked instances using `utils.getBulkedInstance(options)`. It will make at maximum one call to the database and cache the result in the options.
+For bulk triggers, you can pull the bulked instances using `utils.getBulkedInstances(model, options)`. It will make at maximum one call to the database and cache the result in the options.
 * `beforeBulkUpdate` (options: Object)
 * `afterBulkUpdate` (options: Object)
 * `beforeBulkCreate` (options: Object)
