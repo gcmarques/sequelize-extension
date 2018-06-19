@@ -5,6 +5,9 @@ const utils = {};
 utils.getSequelize = model => model.sequelize;
 
 utils.getBulkedInstances = async (model, options) => {
+  if (options.__gsm === undefined) {
+    options.__gsm = {};
+  }
   if (options.__gsm.__instances === undefined) {
     options.__gsm.__instances = await model.findAll({
       where: options.where,
@@ -16,6 +19,9 @@ utils.getBulkedInstances = async (model, options) => {
 };
 
 utils.setTriggerParams = (options, scope, params) => {
+  if (options.__gsm === undefined) {
+    options.__gsm = {};
+  }
   if (!options.__gsm[scope]) {
     options.__gsm[scope] = {};
   }
@@ -23,13 +29,16 @@ utils.setTriggerParams = (options, scope, params) => {
 };
 
 utils.getTriggerParams = (options, scope) => {
+  if (options.__gsm === undefined) {
+    options.__gsm = {};
+  }
   if (!options.__gsm[scope]) {
     options.__gsm[scope] = {};
   }
   return options.__gsm[scope];
 };
 
-utils.getTriggerType = options => options.__gsm.hook;
+utils.getTriggerType = options => utils.getTriggerParams(options, 'hook');
 
 utils.getUser = (options) => {
   const user = options ? options.user : null;
@@ -76,11 +85,16 @@ utils.isNewRecord = instance => instance && instance._options && instance._optio
 
 utils.getAttributeValues = attribute => attribute.values;
 
-utils.isNullableAttribute = attribute => !!attribute.allowNull;
+utils.isNullableAttribute = (attribute) => {
+  if (attribute.allowNull === undefined) {
+    return true;
+  }
+  return !!attribute.allowNull;
+};
 
-utils.isInstance = value => value && value.dataValues;
+utils.isInstance = value => !!(value && value.dataValues);
 
-utils.isModel = model => model && model.options && !!model.options.sequelize;
+utils.isModel = model => !!(model && model.options && !!model.options.sequelize);
 
 utils.getName = model => model.name;
 
@@ -88,6 +102,8 @@ utils.getOptions = model => model.options;
 
 utils.isListAssociation = association => association.associationType === 'HasMany' ||
   association.associationType === 'BelongsToMany';
+
+utils.getAssociationType = association => association.associationType;
 
 utils.isBelongsToAssociation = association => association.associationType === 'BelongsTo';
 

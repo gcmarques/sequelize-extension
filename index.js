@@ -182,7 +182,8 @@ function wrapModels(models, options) {
   // enhance models
   _.each(_.defaults({}, options, defaults), (settings, name) => {
     if (settings !== false) {
-      const fn = _.isFunction(settings) ? settings : enhancers[name];
+      const fn = _.isFunction(settings) ?
+        settings : enhancers[name](_.isObject(settings) ? settings : {});
       if (_.isFunction(fn)) {
         if (!_.isPlainObject(settings)) {
           settings = {};
@@ -194,4 +195,6 @@ function wrapModels(models, options) {
   });
   return models;
 }
+wrapModels.utils = utils;
+
 module.exports = wrapModels;
