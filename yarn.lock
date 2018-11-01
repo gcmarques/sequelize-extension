@@ -2211,15 +2211,19 @@ seq-queue@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/seq-queue/-/seq-queue-0.0.5.tgz#d56812e1c017a6e4e7c3e3a37a1da6d78dd3c93e"
 
-sequelize-extension-createdby@<1.0.0:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/sequelize-extension-createdby/-/sequelize-extension-createdby-0.0.1.tgz#e954eb3f2c8af4212acccb78aad106524c0c2241"
+sequelize-extension-createdby@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/sequelize-extension-createdby/-/sequelize-extension-createdby-0.0.2.tgz#70efc236211cbfc4c143e376ba3d9b0b5377cded"
+  dependencies:
+    lodash "^4.17.10"
 
-sequelize-extension-deletedby@<1.0.0:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/sequelize-extension-deletedby/-/sequelize-extension-deletedby-0.0.1.tgz#433f096a352c6af709c2e2e7322058abb283db6a"
+sequelize-extension-deletedby@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/sequelize-extension-deletedby/-/sequelize-extension-deletedby-0.0.7.tgz#a30e84d1755f5af4bbd396be5e4bee57773324b2"
+  dependencies:
+    lodash "^4.17.10"
 
-sequelize-extension-graphql@<1.0.0:
+sequelize-extension-graphql@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/sequelize-extension-graphql/-/sequelize-extension-graphql-0.0.4.tgz#9ac5ff1e427b40bfaee2e1f75c56a9a9e172f83c"
   dependencies:
@@ -2227,16 +2231,19 @@ sequelize-extension-graphql@<1.0.0:
     graphql-tools-types "^1.1.22"
     lodash "^4.17.10"
 
-sequelize-extension-tracking@<1.0.0:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/sequelize-extension-tracking/-/sequelize-extension-tracking-0.0.2.tgz#3022389db393835f6a0a25c87be0322299ca7dcc"
+sequelize-extension-tracking@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/sequelize-extension-tracking/-/sequelize-extension-tracking-0.0.7.tgz#29ed9f44cc5dc41db2602c15b35c28a4a4aaeb2c"
   dependencies:
+    inflection "^1.12.0"
     lodash "^4.17.5"
     perfy "^1.1.2"
 
-sequelize-extension-updatedby@<1.0.0:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/sequelize-extension-updatedby/-/sequelize-extension-updatedby-0.0.1.tgz#630edbc81f94084c483f5e5948d7efa9755a9b0c"
+sequelize-extension-updatedby@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/sequelize-extension-updatedby/-/sequelize-extension-updatedby-0.0.3.tgz#4819c999fe997d47c2bb4345f4bddec6431e2cac"
+  dependencies:
+    lodash "^4.17.10"
 
 sequelize@^4.33.3:
   version "4.33.3"
