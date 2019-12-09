@@ -23,6 +23,8 @@ const nativeTypes = [
   'TIMESTAMP',
   'BINARY',
   'BLOB',
+  'JSON',
+  'JSONTYPE',
 ];
 
 const ucfirst = str => `${str.substring(0, 1).toUpperCase()}${str.substring(1)}`;
