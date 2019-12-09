@@ -2,6 +2,8 @@ const _ = require('lodash');
 
 const utils = {};
 
+const ucfirst = str => `${str.substring(0, 1).toUpperCase()}${str.substring(1)}`;
+
 utils.getSequelize = model => model.sequelize;
 
 utils.getBulkedInstances = async (model, options) => {
@@ -66,12 +68,12 @@ utils.getAttributeType = (attribute) => {
   if (attribute.fieldName === 'id') {
     type = 'Id';
   } else if (attribute.type && attribute.type.constructor && attribute.type.constructor.name) {
-    type = _.capitalize(attribute.type.constructor.name);
+    type = ucfirst(_.camelCase(attribute.type.constructor.name));
   } else if (attribute.type && attribute.type.name) {
-    type = _.capitalize(attribute.type.name);
+    type = ucfirst(_.camelCase(attribute.type.name));
   }
   if (type === 'Virtual') {
-    type = _.capitalize(attribute.type.returnType.constructor.name);
+    type = ucfirst(_.camelCase(attribute.type.returnType.constructor.name));
   }
   if (!type) {
     throw new Error('Unexpected Type');
