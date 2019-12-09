@@ -2,6 +2,29 @@ const _ = require('lodash');
 
 const utils = {};
 
+const nativeTypes = [
+  'INT',
+  'INTEGER',
+  'BIGINT',
+  'TINYINT',
+  'SMALLINT',
+  'MEDIUMINT',
+  'FLOAT',
+  'DOUBLE',
+  'DECIMAL',
+  'REAL',
+  'BOOL',
+  'BOOLEAN',
+  'STRING',
+  'TEXT',
+  'LONGTEXT',
+  'DATE',
+  'DATETIME',
+  'TIMESTAMP',
+  'BINARY',
+  'BLOB',
+];
+
 const ucfirst = str => `${str.substring(0, 1).toUpperCase()}${str.substring(1)}`;
 
 utils.getSequelize = model => model.sequelize;
@@ -73,7 +96,10 @@ utils.getAttributeType = (attribute) => {
     type = ucfirst(_.camelCase(attribute.type.name));
   }
   if (type === 'Virtual') {
-    type = ucfirst(_.camelCase(attribute.type.returnType.constructor.name));
+    type = attribute.type.returnType.constructor.name;
+    if (nativeTypes.indexOf(type) >= 0) {
+      type = ucfirst(_.camelCase(type));
+    }
   }
   if (!type) {
     throw new Error('Unexpected Type');
