@@ -2211,9 +2211,10 @@ seq-queue@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/seq-queue/-/seq-queue-0.0.5.tgz#d56812e1c017a6e4e7c3e3a37a1da6d78dd3c93e"
 
-sequelize-extension-createdby@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/sequelize-extension-createdby/-/sequelize-extension-createdby-0.0.2.tgz#70efc236211cbfc4c143e376ba3d9b0b5377cded"
+sequelize-extension-createdby@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/sequelize-extension-createdby/-/sequelize-extension-createdby-0.0.3.tgz#7207d45f36d147b6100fcae30d50a7b5abe46e00"
+  integrity sha512-eRIZor0u79XWJq3EltREa7eb7GqH9uRkZKIegxlZqr7QWGhxdD/gKQSUabonSSdq0hCVaJBAPPK6Kd7BtOCTVg==
   dependencies:
     lodash "^4.17.10"
 
