@@ -1,6 +1,6 @@
 {
   "name": "sequelize-extension",
-  "version": "0.1.13",
+  "version": "1.0.0",
   "description": "This module provides an interface to extend sequelize models",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "lodash": "^4.17.5",
     "sequelize-extension-createdby": "^0.0.3",
     "sequelize-extension-deletedby": "^0.0.7",
-    "sequelize-extension-graphql": "^0.0.4",
+    "sequelize-extension-graphql": "^0.1.0",
     "sequelize-extension-tracking": "^0.0.7",
     "sequelize-extension-updatedby": "^0.0.3"
   },
