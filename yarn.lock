@@ -325,15 +325,17 @@ cardinal@1.0.0:
     ansicolors "~0.2.1"
     redeyed "~1.0.0"
 
-chai-as-promised@^7.1.1:
+chai-as-promised@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/chai-as-promised/-/chai-as-promised-7.1.1.tgz#08645d825deb8696ee61725dbf590c012eb00ca0"
+  integrity sha512-azL6xMoi+uxu6z4rhWQ1jbdUhOMhis2PvscD/xjLqNMkv3BPPp2JyyuTHOrf9BOosGpNQ11v6BKv/g57RXbiaA==
   dependencies:
     check-error "^1.0.2"
 
-chai@^4.1.2:
+chai@4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.1.2.tgz#0f64584ba642f0f2ace2806279f4f06ca23ad73c"
+  integrity sha1-D2RYS6ZC8PKs4oBiefTwbKI61zw=
   dependencies:
     assertion-error "^1.0.1"
     check-error "^1.0.1"
@@ -476,9 +478,10 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-cross-env@^5.1.3:
+cross-env@5.1.3:
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.1.3.tgz#f8ae18faac87692b0a8b4d2f7000d4ec3a85dfd7"
+  integrity sha512-UOokgwvDzCT0mqRSLEkJzUhYXB1vK3E5UgDrD41QiXsm9UetcW2rCGHYz/O3p873lMJ1VZbFCF9Izkwh7nYR5A==
   dependencies:
     cross-spawn "^5.1.0"
     is-windows "^1.0.0"
@@ -674,9 +677,10 @@ eslint-config-airbnb-base@^12.1.0:
   dependencies:
     eslint-restricted-globals "^0.1.1"
 
-eslint-config-airbnb@^16.1.0:
+eslint-config-airbnb@16.1.0:
   version "16.1.0"
   resolved "https://registry.yarnpkg.com/eslint-config-airbnb/-/eslint-config-airbnb-16.1.0.tgz#2546bfb02cc9fe92284bf1723ccf2e87bc45ca46"
+  integrity sha512-zLyOhVWhzB/jwbz7IPSbkUuj7X2ox4PHXTcZkEmDqTvd0baJmJyuxlFPDlZOE/Y5bC+HQRaEkT3FoHo9wIdRiw==
   dependencies:
     eslint-config-airbnb-base "^12.1.0"
 
@@ -694,9 +698,10 @@ eslint-module-utils@^2.1.1:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
-eslint-plugin-import@^2.7.0:
+eslint-plugin-import@2.8.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.8.0.tgz#fa1b6ef31fcb3c501c09859c1b86f1fc5b986894"
+  integrity sha512-Rf7dfKJxZ16QuTgVv1OYNxkZcsu/hULFnC+e+w0Gzi6jMC3guQoWQgxYxc54IDRinlb6/0v5z/PxxIKmVctN+g==
   dependencies:
     builtin-modules "^1.1.1"
     contains-path "^0.1.0"
@@ -709,9 +714,10 @@ eslint-plugin-import@^2.7.0:
     minimatch "^3.0.3"
     read-pkg-up "^2.0.0"
 
-eslint-plugin-jsx-a11y@^6.0.2:
+eslint-plugin-jsx-a11y@6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.0.3.tgz#54583d1ae442483162e040e13cc31865465100e5"
+  integrity sha1-VFg9GuRCSDFi4EDhPMMYZUZRAOU=
   dependencies:
     aria-query "^0.7.0"
     array-includes "^3.0.3"
@@ -721,9 +727,10 @@ eslint-plugin-jsx-a11y@^6.0.2:
     emoji-regex "^6.1.0"
     jsx-ast-utils "^2.0.0"
 
-eslint-plugin-react@^7.4.0:
+eslint-plugin-react@7.6.1:
   version "7.6.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.6.1.tgz#5d0e908be599f0c02fbf4eef0c7ed6f29dff7633"
+  integrity sha512-30aMOHWX/DOaaLJVBHz6RMvYM2qy5GH63+y2PLFdIrYe4YLtODFmT3N1YA7ZqUnaBweVbedr4K4cqxOlWAPjIw==
   dependencies:
     doctrine "^2.0.2"
     has "^1.0.1"
@@ -745,9 +752,10 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@^4.9.0:
+eslint@4.18.2:
   version "4.18.2"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.18.2.tgz#0f81267ad1012e7d2051e186a9004cc2267b8d45"
+  integrity sha512-qy4i3wODqKMYfz9LUI8N2qYDkHkoieTbiHpMrYUI/WbjhXJQr7lI4VngixTgaG+yHX+NBCv7nW4hA0ShbvaNKw==
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -1059,9 +1067,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphql-tools-sequelize@^1.3.13:
+graphql-tools-sequelize@1.3.13:
   version "1.3.13"
   resolved "https://registry.yarnpkg.com/graphql-tools-sequelize/-/graphql-tools-sequelize-1.3.13.tgz#6db6f01065db299f32fed2dbd40f76eeaf6d5aaa"
+  integrity sha512-rqeYy9iS8GcNIt0H/0PWH9DJX9PdZ50quNg5d79eIeRtk3nkfFC9yZI8QzUxG2xPD40bTCfosS3kLQwzqAlqOQ==
   dependencies:
     aggregation "~1.2.1"
     babel-runtime "~6.26.0"
@@ -1646,14 +1655,31 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mocha-jenkins-reporter@^0.3.10:
+mocha-jenkins-reporter@0.3.10:
   version "0.3.10"
   resolved "https://registry.yarnpkg.com/mocha-jenkins-reporter/-/mocha-jenkins-reporter-0.3.10.tgz#11b04b84f7bef0ffa2baae6cf6ae9c1c2a0c121b"
+  integrity sha1-EbBLhPe+8P+iuq5s9q6cHCoMEhs=
   dependencies:
     diff "1.0.7"
     mkdirp "0.5.1"
     mocha "^3.0.0"
     xml "^1.0.1"
+
+mocha@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.0.0.tgz#cccac988b0bc5477119cba0e43de7af6d6ad8f4e"
+  integrity sha512-ukB2dF+u4aeJjc6IGtPNnJXfeby5d4ZqySlIBT0OEyva/DrMjVm5HkQxKnHDLKEfEQBsEnwTg9HHhtPHJdTd8w==
+  dependencies:
+    browser-stdout "1.3.0"
+    commander "2.11.0"
+    debug "3.1.0"
+    diff "3.3.1"
+    escape-string-regexp "1.0.5"
+    glob "7.1.2"
+    growl "1.10.3"
+    he "1.1.1"
+    mkdirp "0.5.1"
+    supports-color "4.4.0"
 
 mocha@^3.0.0:
   version "3.5.3"
@@ -1671,21 +1697,6 @@ mocha@^3.0.0:
     lodash.create "3.1.1"
     mkdirp "0.5.1"
     supports-color "3.1.2"
-
-mocha@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.0.0.tgz#cccac988b0bc5477119cba0e43de7af6d6ad8f4e"
-  dependencies:
-    browser-stdout "1.3.0"
-    commander "2.11.0"
-    debug "3.1.0"
-    diff "3.3.1"
-    escape-string-regexp "1.0.5"
-    glob "7.1.2"
-    growl "1.10.3"
-    he "1.1.1"
-    mkdirp "0.5.1"
-    supports-color "4.4.0"
 
 moment-timezone@^0.5.21:
   version "0.5.33"
@@ -1712,9 +1723,10 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-mysql2@^1.5.2:
+mysql2@1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-1.5.2.tgz#e4e073839bb10972669b240ec77061d7ff55cf59"
+  integrity sha512-976p3FxXdNMRRiF6Qe/FCOwaUYw3KXVJiIYu5iE5shM7ggIASgF6G/9gd9rhpBqP8V6MVa3KQJ6Ao1xBeGBljw==
   dependencies:
     cardinal "1.0.0"
     denque "^1.1.1"
@@ -1786,9 +1798,10 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nyc@^11.4.1:
+nyc@11.4.1:
   version "11.4.1"
   resolved "https://registry.yarnpkg.com/nyc/-/nyc-11.4.1.tgz#13fdf7e7ef22d027c61d174758f6978a68f4f5e5"
+  integrity sha512-5eCZpvaksFVjP2rt1r60cfXmt3MUtsQDw8bAzNqNEr4WLvUMLgiVENMf/B9bE9YAX0mGVvaGA3v9IS9ekNqB1Q==
   dependencies:
     archy "^1.0.0"
     arrify "^1.0.1"
@@ -2268,7 +2281,7 @@ sequelize-pool@^2.3.0:
   resolved "https://registry.yarnpkg.com/sequelize-pool/-/sequelize-pool-2.3.0.tgz#64f1fe8744228172c474f530604b6133be64993d"
   integrity sha512-Ibz08vnXvkZ8LJTiUOxRcj1Ckdn7qafNZ2t59jYHMX1VIebTAOYefWdRYFt6z6+hy52WGthAHAoLc9hvk3onqA==
 
-sequelize@^5.15.1:
+sequelize@5.15.1:
   version "5.15.1"
   resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.15.1.tgz#f130ded17e74395ae7f5e265277c99577e895afb"
   integrity sha512-DCzzJYvJLMKnyf8G3at2A+yM9M2fSQmTmuOYIpCWM8Gjqx3XfgNTd1NkuyPWFoi1/d1AXQsN2VDPXkPczida8A==
@@ -2315,13 +2328,15 @@ signal-exit@^3.0.0, signal-exit@^3.0.1, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sinon-chai@^2.14.0:
+sinon-chai@2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-2.14.0.tgz#da7dd4cc83cd6a260b67cca0f7a9fdae26a1205d"
+  integrity sha512-9stIF1utB0ywNHNT7RgiXbdmen8QDCRsrTjw+G9TgKt1Yexjiv8TOWZ6WHsTPz57Yky3DIswZvEqX8fpuHNDtQ==
 
-sinon@^4.2.2:
+sinon@4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.2.2.tgz#e039ab27bdb426fc61363c380726e996a2e2c620"
+  integrity sha512-BEa593xl+IkIc94nKo0O0LauQC/gQy8Gyv4DkzPwF/9DweC5phr1y+42zibCpn9abfkdHxt9r8AhD0R6u9DE/Q==
   dependencies:
     diff "^3.1.0"
     formatio "1.2.0"
