@@ -40,6 +40,7 @@ utils.getBulkedInstances = async (model, options) => {
       where: options.where,
       include: options.include,
       transaction: options.transaction,
+      paranoid: options.paranoid,
     });
   }
   return options.__gsm.__instances;
