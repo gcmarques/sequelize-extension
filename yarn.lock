@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@babel/runtime-corejs2@7.20.7":
+  version "7.20.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs2/-/runtime-corejs2-7.20.7.tgz#84ec2bb0ed33199e7d92aea104318ffd6732d245"
+  integrity sha512-SrtIxfjwLkUFljufH1GeqYlIYzdyxP2IoCb3tVjcrTdMyB7RQyRCdkyMzvw3k/h+CStnSf2SvvQicS1Rf/fuGQ==
+  dependencies:
+    core-js "^2.6.12"
+    regenerator-runtime "^0.13.11"
+
 "@babel/runtime-corejs3@7.9.6":
   version "7.9.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.9.6.tgz#67aded13fffbbc2cb93247388cf84d77a4be9a71"
@@ -35,9 +43,10 @@ acorn@^5.4.0:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.4.1.tgz#fdc58d9d17f4a4e98d102ded826a9b9759125102"
 
-aggregation@~1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/aggregation/-/aggregation-1.2.1.tgz#21180bd7e50988385442bd08239509292f1e8fb7"
+aggregation@1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/aggregation/-/aggregation-1.2.7.tgz#7a71410891b91d476229cd9226304ebbfbb20626"
+  integrity sha512-srZKi3tJbkdOeCtGBG7o6+qtRZ//ksJhlt9rtFipWdt/VohD6KJ954Qi99GG1c4PHu4yjPktQyP+vjgXOF6eUw==
 
 ajv-keywords@^2.1.0:
   version "2.1.1"
@@ -212,7 +221,7 @@ babel-messages@^6.23.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-runtime@^6.22.0, babel-runtime@^6.26.0, babel-runtime@~6.26.0:
+babel-runtime@^6.22.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -260,14 +269,10 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-bluebird@^3.5.0:
+bluebird@3.7.2, bluebird@^3.5.0:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
-
-bluebird@~3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 brace-expansion@^1.1.7:
   version "1.1.10"
@@ -313,10 +318,6 @@ callsites@^0.2.0:
 camelcase@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
-
-capitalize@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/capitalize/-/capitalize-1.0.0.tgz#dc802c580aee101929020d2ca14b4ca8a0ae44be"
 
 cardinal@1.0.0:
   version "1.0.0"
@@ -472,6 +473,11 @@ core-js@^2.4.0:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
+core-js@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
+  integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
+
 core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -622,13 +628,15 @@ ducky@2.7.2:
   resolved "https://registry.yarnpkg.com/ducky/-/ducky-2.7.2.tgz#404059df2699b86801e9f792739ca1ba66f4612d"
   integrity sha512-lQlu+8mETk41PjR+9KrKp1ONhtDHwWnV/RH89o4HbeRCc5L6BgzdK4UcYW2ZlDDeDgtX24xymC6ctqhh5HcYFg==
 
-ducky@~2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/ducky/-/ducky-2.6.3.tgz#4cfad9288f98e65a074a7eb0dedbf06e9130503e"
+ducky@2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/ducky/-/ducky-2.7.3.tgz#aa0163cb091c2039c35d0ad6ff64ef2a169f13c9"
+  integrity sha512-DW4+CPlM+5DmUjJCOhLZDF0XolnZrsIVZXvYmexqCROlul+qRO/RBHN15/IHo+d+rMKS/8hMIZISdv8Kv/Yp0Q==
 
-elasticlunr@~0.9.5:
+elasticlunr@0.9.5:
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/elasticlunr/-/elasticlunr-0.9.5.tgz#65541bb309dddd0cf94f2d1c8861b2be651bb0d5"
+  integrity sha512-5YM9LFQgVYfuLNEoqMqVWIBuF2UNCA+xu/jz1TyryLN/wmBcQSb+GNAwvLKvEpGESwgGN8XA1nbLAt6rKlyHYQ==
 
 emoji-regex@^6.1.0:
   version "6.5.1"
@@ -1059,17 +1067,17 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphql-tools-sequelize@^1.3.13:
-  version "1.3.13"
-  resolved "https://registry.yarnpkg.com/graphql-tools-sequelize/-/graphql-tools-sequelize-1.3.13.tgz#6db6f01065db299f32fed2dbd40f76eeaf6d5aaa"
+graphql-tools-sequelize@^2.0.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools-sequelize/-/graphql-tools-sequelize-2.3.0.tgz#eaa9d7a14d2d4662e91fe1ace3bd2d21e5384513"
+  integrity sha512-1zT8fX1h5azimA2AylPs6bvZ9oN1RlGdHS7wm8shiZ182SWDsrOK2/kZ4971LDQb40EHdCNmOxyekLsAA53HVA==
   dependencies:
-    aggregation "~1.2.1"
-    babel-runtime "~6.26.0"
-    bluebird "~3.5.1"
-    capitalize "~1.0.0"
-    ducky "~2.6.3"
-    elasticlunr "~0.9.5"
-    pure-uuid "~1.4.11"
+    "@babel/runtime-corejs2" "7.20.7"
+    aggregation "1.2.7"
+    bluebird "3.7.2"
+    ducky "2.7.3"
+    elasticlunr "0.9.5"
+    pure-uuid "1.6.2"
 
 graphql-tools-types@^1.2.3:
   version "1.3.0"
@@ -2036,9 +2044,10 @@ pure-uuid@1.6.0:
   resolved "https://registry.yarnpkg.com/pure-uuid/-/pure-uuid-1.6.0.tgz#304da991dbd38d1efd03342d3e104f6666f6e38d"
   integrity sha512-z+A7GMeyPu4X1NoGKraYiOOFzK0HZpnsHwbJZbt9NGGaqrfs3amyuWgRhHnfMJN4MM0IbAsLvHBqt0p1S84UQQ==
 
-pure-uuid@~1.4.11:
-  version "1.4.13"
-  resolved "https://registry.yarnpkg.com/pure-uuid/-/pure-uuid-1.4.13.tgz#f1524dea17983967a181e5ab4fd087c79e489409"
+pure-uuid@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/pure-uuid/-/pure-uuid-1.6.2.tgz#64f3032d54953b93b0585be3263a2629f1d60a04"
+  integrity sha512-WQ4xz74ApW6s0BToRuuyuMo9g0VHx1HljY0H2gPng+mqqz/K1yLj7sHZonZZQ2++WfHl/ZzruilWvuz+WtmxjQ==
 
 randomatic@^1.1.3:
   version "1.1.7"
@@ -2110,6 +2119,11 @@ redeyed@~1.0.0:
 regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+
+regenerator-runtime@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regenerator-runtime@^0.13.4:
   version "0.13.5"
